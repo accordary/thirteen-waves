@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Thirteen Waves</title>
+<style>
+  body { margin:0; background:#05070f; color:#e6edf3; font:14px/1.5 system-ui,sans-serif; }
+  #wrap { max-width:960px; margin:0 auto; padding:12px; }
+  #stage { position:relative; }
+  canvas { width:100%; display:block; background:#05070f; border:1px solid #1b2740; border-radius:6px; cursor:crosshair; }
+  #hud { display:flex; flex-wrap:wrap; gap:14px; align-items:center; padding:8px 4px; }
+  #hud .grp { display:flex; align-items:center; gap:6px; }
+  #hud .bar { display:inline-block; width:90px; height:10px; background:#12233d; border-radius:5px; overflow:hidden; }
+  #hud .bar i { display:block; height:100%; }
+  #hud .lbl { letter-spacing:1px; color:#8fa4c0; }
+  #overlay { position:absolute; inset:0; display:flex; flex-direction:column; justify-content:center;
+    align-items:center; text-align:center; background:rgba(5,7,15,.88); border-radius:6px; padding:20px; }
+  #overlay h1 { margin:.2em 0; } #overlay ul { text-align:left; } #overlay .cta { color:#7ee787; }
+  #bar2 { display:flex; gap:12px; align-items:center; padding:6px 4px; color:#8fa4c0; }
+  button { background:#12233d; color:#e6edf3; border:1px solid #274162; border-radius:4px; padding:4px 10px; cursor:pointer; }
+</style>
+</head>
+<body>
+<div id="wrap">
+  <div id="hud"></div>
+  <div id="stage"><canvas id="view" width="960" height="600"></canvas><div id="overlay"></div></div>
+  <div id="bar2">
+    <button id="mute">Mute (M)</button>
+    <label>Volume <input id="volume" type="range" min="0" max="1" step="0.05"></label>
+    <span>WASD/Arrows move · mouse aims · click fires · P pause · R restart</span>
+  </div>
+</div>
+<script src="src/game.js"></script>
+<script src="src/main.js"></script>
+</body>
+</html>
