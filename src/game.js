@@ -147,7 +147,7 @@
   Game.prototype.damageEnemy = function (e, amount, damageType) {
     var dmg = amount, weak = damageType && damageType === e.weakness;
     if (weak) dmg *= CFG.weaknessMultiplier;
-    else if (e.armor) dmg *= (1 - e.armor);
+    else if (e.armor) dmg *= (1 - (e.armor || 0));
     e.hp -= dmg;
     e.hitFlash = 0.12;
     if (weak) { e.weakFlash = 0.25; this.events.push('weaknessHit'); }
@@ -192,6 +192,13 @@
 
   /* Behavior movement + telegraphed attacks. */
   Game.prototype.updateEnemy = function (e, dt) {
+    /* enemies built by hand (tests/fixtures) may lack behavior fields; defaults keep motion finite */
+    var d = ENEMY_TYPES[e.type] || {};
+    if (e.weakness === undefined) e.weakness = d.weakness;
+    if (typeof e.speed !== 'number' || isNaN(e.speed)) e.speed = d.speed || CFG.chaserSpeed;
+    ['vx','vy','t','phase','cd','timer','touchTimer','hitFlash','weakFlash','shotTimer','telegraph'].forEach(function (k) {
+      if (typeof e[k] !== 'number' || isNaN(e[k])) e[k] = 0;
+    });
     var p = this.player, dx = p.x - e.x, dy = p.y - e.y, d = Math.sqrt(dx * dx + dy * dy) || 1;
     var t = ENEMY_TYPES[e.type], ux = dx / d, uy = dy / d;
 
