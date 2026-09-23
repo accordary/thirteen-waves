@@ -154,5 +154,7 @@
 
   var api = { Game: Game, CFG: CFG };
   if (typeof module !== 'undefined' && module.exports) module.exports = api;
-  root.TW = api;
+  // logic.js also publishes root.TW; merge so the browser build has both halves
+  var prev = root.TW; if (prev) { for (var k in api) if (Object.prototype.hasOwnProperty.call(api, k)) prev[k] = api[k]; }
+  else root.TW = api;
 })(typeof window !== 'undefined' ? window : globalThis);
