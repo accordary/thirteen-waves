@@ -165,7 +165,9 @@
 
   Game.prototype.killEnemy = function (e, index) {
     this.enemies.splice(index, 1);
-    this.kills++; this.score += e.points; this.killPoints += e.points;
+    var pts = e.points;
+    if (typeof pts !== 'number' || isNaN(pts)) pts = (ENEMY_TYPES[e.type] || {}).points || CFG.killPoints;
+    this.kills++; this.score += pts; this.killPoints += pts;
     this.events.push('kill');
     if (e.behavior === 'split') {
       var n = ENEMY_TYPES.splitter.shards;

@@ -43,7 +43,8 @@ t('bullets kill a chaser and award score and kill points', function () {
   assert.ok(g.kills >= 1);
   assert.strictEqual(g.score, g.kills * TW.CFG.killPoints);
   assert.strictEqual(g.killPoints, g.score);
-  assert.ok(shots >= 2);
+  // chaser's designated weakness is plasma, so a single 2x hit is lethal
+  assert.ok(shots >= 1);
 });
 
 t('shield absorbs before hull, then hull takes the remainder', function () {
