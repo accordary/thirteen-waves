@@ -89,7 +89,8 @@ t('enemies spawn over time while playing', function () {
 
 t('wave expires at 90s, clears the field and transitions', function () {
   var g = new TW.Game(3); g.start();
-  for (var i = 0; i < 2000 && g.state === 'playing'; i++) g.update(0.05, {});
+  // run out the clock with a cleared field so survival isn't what's under test
+  for (var i = 0; i < 2000 && g.state === 'playing'; i++) { g.enemies.length = 0; g.update(0.05, {}); }
   assert.strictEqual(g.state, 'waveComplete');
   assert.strictEqual(g.timeLeft, 0);
   assert.strictEqual(g.enemies.length, 0);

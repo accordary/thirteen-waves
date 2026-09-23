@@ -73,13 +73,14 @@
     var p = this.player, remain = amount;
     if (p.shield > 0) { var a = Math.min(p.shield, remain); p.shield -= a; remain -= a; this.events.push('shieldHit'); }
     if (remain > 0) { p.hull = Math.max(0, p.hull - remain); this.events.push('hullHit'); }
-    p.sinceHit = 0; p.hitFlash = 0.15;
+    p.sinceHit = 0; p.damagedThisFrame = true; p.hitFlash = 0.15;
     if (p.hull <= 0) this.state = 'gameOver';
   };
 
   // input: {up,down,left,right,firing,aimX,aimY}
   Game.prototype.update = function (dt, input) {
     if (this.state !== 'playing') return;
+    this.player.damagedThisFrame = false;
     input = input || {};
     dt = Math.min(dt, 0.05);
     var p = this.player, c = CFG;
@@ -137,7 +138,7 @@
     }
 
     // regen resolves after collisions so a frame with damage never also regenerates
-    if (p.sinceHit > c.shieldRegenDelay) p.shield = Math.min(c.shieldMax, p.shield + c.shieldRegen * dt);
+    if (!p.damagedThisFrame && p.sinceHit > c.shieldRegenDelay) p.shield = Math.min(c.shieldMax, p.shield + c.shieldRegen * dt);
 
     this.timeLeft -= dt;
     if (this.timeLeft <= 0) {
