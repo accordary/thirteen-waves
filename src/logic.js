@@ -3,7 +3,7 @@
   if (typeof module === 'object' && module.exports) module.exports = factory();
   else root.TW = factory();
 })(typeof self !== 'undefined' ? self : this, function () {
-  const TOTAL_WAVES = 13;
+  const TOTAL_WAVES = 3;
   const WAVE_SECONDS = 90;
   const BASE_REROLL = 75;
   const MAX_ABILITIES = 4;

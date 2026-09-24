@@ -1,7 +1,7 @@
 # Thirteen Waves
 
-Browser-playable top-down 2D space shooter. This build delivers milestone 22: the playable core
-loop and the first 90-second wave.
+Browser-playable top-down 2D space shooter. This build delivers the three-wave expedition run:
+three sequential 90-second waves with escalating encounters.
 
 ## Play it
 
@@ -30,8 +30,12 @@ Opening `index.html` directly from disk also works in most browsers.
 
 ## What is in this build
 
-- One 90-second wave with a live timer; on expiry remaining enemies and shots are cleared with no
-  kill rewards and the wave-complete screen appears.
+- Three sequential 90-second waves with a live timer and wave indicator; on expiry remaining enemies
+  and shots are cleared with no kill rewards and the wave-complete screen appears. Clearing wave 3
+  ends the run with a victory summary; hull at zero ends it with a loss summary. `R` restarts a
+  fresh run with all progression reset.
+- Escalating encounters: wave 1 chasers; wave 2 adds shooters and flankers; wave 3 adds splitters,
+  tanks and controllers. Spawn interval tightens and enemy HP scales each wave.
 - Basic chaser enemies that spawn from the field edges and home in on the player.
 - Hull and shields: shields absorb damage first and recharge after 3 seconds without being hit;
   hull damage is permanent within a run. Hull at zero ends the run with a summary.
@@ -42,7 +46,7 @@ Opening `index.html` directly from disk also works in most browsers.
 
 ## Not in this build (later milestones)
 
-Waves 2-13, the shop and upgrades, abilities and ability slots, damage types/resistances, and the
+The shop and upgrades, abilities and ability slots, damage types/resistances, and the
 five remaining enemy behaviors.
 
 ## Tests

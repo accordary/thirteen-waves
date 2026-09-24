@@ -53,7 +53,7 @@ const world = { enemies: [{},{},{}], enemyShots: [{}], playerShots: [{},{}], mis
 const r = TW.expireWave(world);
 eq(r, { clearedWithoutReward: 3, pointsAwarded: 0 }, 'expiry clears survivors with no kill reward');
 eq([world.enemies.length, world.enemyShots.length, world.playerShots.length, world.missiles.length], [0,0,0,0], 'all shots and enemies removed');
-eq([TW.WAVE_SECONDS, TW.TOTAL_WAVES], [90, 13], 'wave is 90s, run is 13 waves');
+eq([TW.WAVE_SECONDS, TW.TOTAL_WAVES], [90, 3], 'wave is 90s, run is 3 waves');
 
 console.log('\n' + pass + ' passed, ' + fail + ' failed');
 process.exit(fail ? 1 : 0);

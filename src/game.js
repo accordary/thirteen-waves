@@ -7,7 +7,7 @@
 
   var CFG = {
     width: 960, height: 600,
-    waveSeconds: 90, totalWaves: 13,
+    waveSeconds: 90, totalWaves: 3,
     playerSpeed: 260, playerRadius: 14,
     hullMax: 100, shieldMax: 60, shieldRegen: 4, shieldRegenDelay: 3,
     bulletSpeed: 560, bulletRadius: 4, bulletDamage: 10, fireCooldown: 0.18,
@@ -42,15 +42,12 @@
   /* Pacing: roster widens and density rises as waves progress. */
   function waveRoster(wave) {
     var r = ['chaser'];
-    if (wave >= 2) r.push('shooter');
-    if (wave >= 3) r.push('flanker');
-    if (wave >= 4) r.push('splitter');
-    if (wave >= 5) r.push('tank');
-    if (wave >= 6) r.push('controller');
+    if (wave >= 2) { r.push('shooter'); r.push('flanker'); }
+    if (wave >= 3) { r.push('splitter'); r.push('tank'); r.push('controller'); }
     return r;
   }
-  function waveSpawnInterval(wave) { return Math.max(0.55, CFG.spawnInterval - (wave - 1) * 0.08); }
-  function waveHpScale(wave) { return 1 + (wave - 1) * 0.12; }
+  function waveSpawnInterval(wave) { return Math.max(0.7, CFG.spawnInterval - (wave - 1) * 0.35); }
+  function waveHpScale(wave) { return 1 + (wave - 1) * 0.3; }
 
   function dist(a, b) { var dx = a.x - b.x, dy = a.y - b.y; return Math.sqrt(dx * dx + dy * dy); }
   function clamp(v, lo, hi) { return v < lo ? lo : v > hi ? hi : v; }
