@@ -25,7 +25,8 @@
     } catch (e) { /* audio unavailable */ }
   }
   var SFX = { shot: [520, 0.06], enemyHit: [300, 0.05], kill: [180, 0.18, 'sawtooth'],
-              shieldHit: [740, 0.12], hullHit: [110, 0.25, 'sawtooth'], waveComplete: [880, 0.4, 'triangle'] };
+              shieldHit: [740, 0.12], hullHit: [110, 0.25, 'sawtooth'], waveComplete: [880, 0.4, 'triangle'],
+              victory: [1046, 0.5, 'triangle'] };
 
   var KEYMAP = { KeyW: 'up', ArrowUp: 'up', KeyS: 'down', ArrowDown: 'down',
                  KeyA: 'left', ArrowLeft: 'left', KeyD: 'right', ArrowRight: 'right' };
@@ -40,7 +41,8 @@
     if (ev.code === 'KeyR') { restart(); }
     if (ev.code === 'Space') { ev.preventDefault();
       if (game.state === 'onboarding') { game.start(); setOverlay(); }
-      else if (game.state === 'waveComplete' || game.state === 'gameOver') restart(); }
+      else if (game.state === 'waveComplete') { game.nextWave(); setOverlay(); }
+      else if (game.state === 'gameOver' || game.state === 'victory') restart(); }
   });
   addEventListener('keyup', function (ev) { if (KEYMAP[ev.code]) input[KEYMAP[ev.code]] = false; });
   canvas.addEventListener('mousemove', function (ev) {
@@ -54,24 +56,33 @@
     muteBtn.textContent = muted ? 'Unmute (M)' : 'Mute (M)'; });
   vol.addEventListener('input', function () { volume = Number(vol.value); localStorage.setItem('tw13.volume', volume); });
 
+  function recordBest() { if (game.score > best) { best = game.score; localStorage.setItem('tw13.best', best); } }
+
   function setOverlay() {
     var s = game.state, html = '';
     if (s === 'onboarding') {
-      html = '<h1>Thirteen Waves</h1><p>Survive the wave. Clear 13 waves to win.</p>' +
+      html = '<h1>Thirteen Waves</h1><p>Wave 1 of ' + CFG.totalWaves + '. Survive three 90-second waves.</p>' +
         '<ul><li><b>WASD / Arrows</b> — move</li><li><b>Mouse</b> — aim, <b>click/hold</b> — fire</li>' +
         '<li><b>P / Esc</b> — pause, <b>R</b> — restart, <b>M</b> — mute</li></ul>' +
         '<p>Shields absorb damage first and recharge when you avoid hits. Hull does not.</p>' +
         '<p class="cta">Press <b>Space</b> or click to launch</p>';
     } else if (s === 'paused') { html = '<h1>Paused</h1><p class="cta">Press <b>P</b> to resume</p>'; }
     else if (s === 'waveComplete') {
-      if (game.score > best) { best = game.score; localStorage.setItem('tw13.best', best); }
-      html = '<h1>Wave ' + game.wave + ' complete</h1><p>Kills: ' + game.kills + ' · Score: ' + game.score +
+      recordBest();
+      html = '<h1>Wave ' + game.wave + ' of ' + CFG.totalWaves + ' complete</h1>' +
+        '<p>Kills: ' + game.kills + ' · Score: ' + game.score +
         ' · Kill points: ' + game.killPoints + '</p><p>Best score: ' + best + '</p>' +
-        '<p class="cta">Shop and waves 2-13 arrive in the next milestone. Press <b>Space</b> to play again.</p>';
+        '<p class="cta">Press <b>Space</b> to continue to wave ' + (game.wave + 1) + ' of ' + CFG.totalWaves + '</p>';
+    } else if (s === 'victory') {
+      recordBest();
+      html = '<h1>You won — expedition complete</h1>' +
+        '<p>Run summary — all ' + CFG.totalWaves + ' waves cleared, kills ' + game.kills +
+        ', score ' + game.score + ', kill points ' + game.killPoints + '</p><p>Best score: ' + best + '</p>' +
+        '<p class="cta">Press <b>Space</b> or <b>R</b> to start a fresh run</p>';
     } else if (s === 'gameOver') {
-      if (game.score > best) { best = game.score; localStorage.setItem('tw13.best', best); }
-      html = '<h1>Hull breach</h1><p>Run summary — wave ' + game.wave + ', kills ' + game.kills +
-        ', score ' + game.score + '</p><p>Best score: ' + best + '</p>' +
+      recordBest();
+      html = '<h1>Hull breach</h1><p>Run summary — wave ' + game.wave + ' of ' + CFG.totalWaves +
+        ', kills ' + game.kills + ', score ' + game.score + '</p><p>Best score: ' + best + '</p>' +
         '<p class="cta">Press <b>Space</b> or <b>R</b> to restart</p>';
     }
     overlay.innerHTML = html;
@@ -89,7 +100,7 @@
     hud.innerHTML =
       '<div class="grp">' + bar('HULL', p.hull, CFG.hullMax, '#ff5f6d') + '</div>' +
       '<div class="grp">' + bar('SHLD', p.shield, CFG.shieldMax, '#4fc3f7') + '</div>' +
-      '<div class="grp">WAVE <b>' + game.wave + '/13</b></div>' +
+      '<div class="grp">WAVE <b>' + game.wave + '/' + CFG.totalWaves + '</b></div>' +
       '<div class="grp">TIME <b>' + Math.ceil(game.timeLeft) + 's</b></div>' +
       '<div class="grp">SCORE <b>' + game.score + '</b></div>' +
       '<div class="grp">KP <b>' + game.killPoints + '</b></div>' +
@@ -130,7 +141,7 @@
     var dt = (now - last) / 1000; last = now;
     game.update(dt, input);
     game.drainEvents().forEach(function (ev) { var s = SFX[ev]; if (s) beep(s[0], s[1], s[2]); });
-    if (game.state === 'waveComplete' || game.state === 'gameOver') setOverlay();
+    if (game.state === 'waveComplete' || game.state === 'gameOver' || game.state === 'victory') setOverlay();
     render(); drawHud();
     requestAnimationFrame(loop);
   }
