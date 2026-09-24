@@ -40,6 +40,10 @@ Opening `index.html` directly from disk also works in most browsers.
 - Escalating encounters: wave 1 chasers; wave 2 adds shooters and flankers; wave 3 adds splitters,
   tanks and controllers. Spawn interval tightens and enemy HP scales each wave.
 - Basic chaser enemies that spawn from the field edges and home in on the player.
+- Ranged `shooter` enemy from wave 2 onward, visually distinct from the red chaser (violet body) and
+  distinct in stats (26 HP, slower, 14 points). It keeps its distance and fires only after a 0.6s
+  telegraph wind-up; a fresh spawn cannot fire for at least ~1.6s (1-3s attack timer + telegraph),
+  so there is no unavoidable damage on spawn.
 - Hull and shields: shields absorb damage first and recharge after 3 seconds without being hit;
   hull damage is permanent within a run. Hull at zero ends the run with a summary.
 - Between-wave shop after waves 1 and 2 (not after wave 3): spend kill points on a hull repair
@@ -54,8 +58,7 @@ Opening `index.html` directly from disk also works in most browsers.
 
 ## Not in this build (later milestones)
 
-The visually distinct ranged enemy from wave 2, accessibility pass and release readiness, plus
-abilities and ability slots, damage types/resistances and the remaining enemy behaviors.
+Accessibility pass and release readiness, plus abilities and ability slots, damage types/resistances and the remaining enemy behaviors.
 
 ## Tests
 

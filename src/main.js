@@ -133,7 +133,9 @@
     game.bullets.forEach(function (b) { ctx.beginPath(); ctx.arc(b.x, b.y, b.radius, 0, 6.2832); ctx.fill(); });
 
     game.enemies.forEach(function (e) {
-      ctx.fillStyle = e.hitFlash > 0 ? '#ffffff' : '#c0392b';
+      const ENEMY_COLORS = { chaser: '#c0392b', shooter: '#8e44ad', flanker: '#d35400',
+        splitter: '#16a085', tank: '#7f8c8d', controller: '#2980b9' };
+      ctx.fillStyle = e.hitFlash > 0 ? '#ffffff' : (ENEMY_COLORS[e.type] || '#c0392b');
       ctx.beginPath(); ctx.arc(e.x, e.y, e.radius, 0, 6.2832); ctx.fill();
       ctx.strokeStyle = '#ff8a80'; ctx.beginPath(); ctx.arc(e.x, e.y, e.radius + 3, 0, 6.2832); ctx.stroke();
     });
