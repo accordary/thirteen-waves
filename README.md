@@ -56,9 +56,14 @@ Opening `index.html` directly from disk also works in most browsers.
 - Onboarding overlay explaining goal, controls and the shield model; pause, restart, mute/volume.
 - Hit/kill/shield/hull audio cues and hit flashes for readable feedback.
 
+- Accessibility markup: the HUD is an `aria-live="polite"` status region and the overlay an
+  `aria-live="assertive"` dialog, so hull/shield/wave changes and wave-complete, shop, victory and
+  loss screens are announced by screen readers; the canvas is focusable with a descriptive label and
+  focus is visible (`:focus-visible` outline). The controls hint under the field lists every key.
+
 ## Not in this build (later milestones)
 
-Accessibility pass and release readiness, plus abilities and ability slots, damage types/resistances and the remaining enemy behaviors.
+Full accessibility pass (reduced-motion and colour-blind options) and release readiness, plus abilities and ability slots, damage types/resistances and the remaining enemy behaviors.
 
 ## Tests
 
