@@ -63,7 +63,7 @@ Opening `index.html` directly from disk also works in most browsers.
 
 ## Not in this build (later milestones)
 
-Full accessibility pass (reduced-motion and colour-blind options) and release readiness, plus abilities and ability slots, damage types/resistances and the remaining enemy behaviors.
+Reduced-motion and colour-blind options, plus abilities and ability slots, damage types/resistances and the remaining enemy behaviors.
 
 ## Tests
 
@@ -72,12 +72,18 @@ node test/game.test.js
 node test/combat.test.js
 node test/rules.test.js
 node test/shop.test.js
+node test/ranged.test.js
+
+# or the whole suite:
+node --test test/
 ```
 
 Headless logic tests covering movement, firing cooldown, kill rewards, shield/hull damage, shield
 regen delay, contact-damage cooldown, spawning, 90-second wave expiry, pause and restart, wave
 progression to victory, economy rules and the between-wave shop (opening, pricing, affordability,
-upgrade effect, continue and restart reset).
+upgrade effect, continue and restart reset), plus the ranged shooter (wave-2 gating, 0.6s telegraph
+before every shot, the ~1.6s no-damage window after spawn, hostile-shot creation and the
+shot/hazard/telegraph draw contract in `src/main.js`).
 
 ## Layout
 
@@ -85,4 +91,5 @@ upgrade effect, continue and restart reset).
 - `src/game.js` — DOM-free game logic (also loadable with `require` in Node)
 - `src/main.js` — rendering, input, audio, HUD and overlay wiring
 - `src/logic.js` — pure economy/shop rules
-- `test/game.test.js`, `test/combat.test.js`, `test/rules.test.js`, `test/shop.test.js` — headless tests
+- `test/game.test.js`, `test/combat.test.js`, `test/rules.test.js`, `test/shop.test.js`,
+  `test/ranged.test.js` — headless tests
