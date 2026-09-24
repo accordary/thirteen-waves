@@ -39,9 +39,14 @@
     if (ev.code === 'KeyM') { muted = !muted; localStorage.setItem('tw13.muted', muted ? '1' : '0');
                               muteBtn.textContent = muted ? 'Unmute (M)' : 'Mute (M)'; }
     if (ev.code === 'KeyR') { restart(); }
+    if (game.state === 'shop' && (ev.code === 'Digit1' || ev.code === 'Digit2')) {
+      if (ev.code === 'Digit1') game.buyRepair(); else game.buyWeapon();
+      setOverlay();
+    }
     if (ev.code === 'Space') { ev.preventDefault();
       if (game.state === 'onboarding') { game.start(); setOverlay(); }
-      else if (game.state === 'waveComplete') { game.nextWave(); setOverlay(); }
+      else if (game.state === 'waveComplete') { if (!game.openShop()) game.nextWave(); setOverlay(); }
+      else if (game.state === 'shop') { game.closeShop(); setOverlay(); }
       else if (game.state === 'gameOver' || game.state === 'victory') restart(); }
   });
   addEventListener('keyup', function (ev) { if (KEYMAP[ev.code]) input[KEYMAP[ev.code]] = false; });
@@ -72,6 +77,17 @@
       html = '<h1>Wave ' + game.wave + ' of ' + CFG.totalWaves + ' complete</h1>' +
         '<p>Kills: ' + game.kills + ' · Score: ' + game.score +
         ' · Kill points: ' + game.killPoints + '</p><p>Best score: ' + best + '</p>' +
+        '<p class="cta">Press <b>Space</b> to continue to wave ' + (game.wave + 1) + ' of ' + CFG.totalWaves + '</p>';
+    } else if (s === 'shop') {
+      var pr = game.shopPrices(), p2 = game.player;
+      var repairLine = p2.hull >= CFG.hullMax ? 'hull already full' :
+        (game.killPoints >= pr.repair ? 'affordable' : 'not enough kill points');
+      var weaponLine = game.killPoints >= pr.weapon ? 'affordable' : 'not enough kill points';
+      html = '<h1>Shop \u2014 after wave ' + game.wave + ' of ' + CFG.totalWaves + '</h1>' +
+        '<p>Kill points available: <b>' + game.killPoints + '</b></p>' +
+        '<ul><li><b>1</b> \u2014 Hull repair, +35 hull (' + pr.repair + ' KP) \u2014 ' + repairLine + '</li>' +
+        '<li><b>2</b> \u2014 Weapon upgrade lv' + (game.weaponLevel + 1) + ', 18% faster fire (' + pr.weapon + ' KP) \u2014 ' + weaponLine + '</li></ul>' +
+        '<p>Hull ' + Math.ceil(p2.hull) + '/' + CFG.hullMax + ' \u00b7 Weapon level ' + game.weaponLevel + '</p>' +
         '<p class="cta">Press <b>Space</b> to continue to wave ' + (game.wave + 1) + ' of ' + CFG.totalWaves + '</p>';
     } else if (s === 'victory') {
       recordBest();

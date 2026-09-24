@@ -70,6 +70,7 @@
     this.timeLeft = CFG.waveSeconds;
     this.score = 0;
     this.killPoints = 0;
+    this.weaponLevel = 0;
     this.kills = 0;
     this.damageType = 'plasma';
     this.player = { x: CFG.width / 2, y: CFG.height / 2, hull: CFG.hullMax, shield: CFG.shieldMax,
@@ -108,6 +109,42 @@
     return true;
   };
 
+
+  /* Between-wave shop (contract item 2): opens after waves 1 and 2 only. */
+  Game.prototype.shopPrices = function () {
+    return { repair: 40, weapon: Math.ceil(60 * Math.pow(1.35, this.weaponLevel)) };
+  };
+  Game.prototype.openShop = function () {
+    if (this.state !== 'waveComplete') return false;
+    if (this.wave >= CFG.totalWaves) return false;
+    this.state = 'shop';
+    this.events.push('shopOpen:' + this.wave);
+    return true;
+  };
+  Game.prototype.buyRepair = function () {
+    if (this.state !== 'shop') return false;
+    var cost = this.shopPrices().repair, p = this.player;
+    if (this.killPoints < cost || p.hull >= CFG.hullMax) return false;
+    this.killPoints -= cost;
+    p.hull = Math.min(CFG.hullMax, p.hull + 35);
+    this.events.push('buyRepair');
+    return true;
+  };
+  Game.prototype.buyWeapon = function () {
+    if (this.state !== 'shop') return false;
+    var cost = this.shopPrices().weapon;
+    if (this.killPoints < cost) return false;
+    this.killPoints -= cost;
+    this.weaponLevel += 1;
+    this.events.push('buyWeapon');
+    return true;
+  };
+  Game.prototype.closeShop = function () {
+    if (this.state !== 'shop') return false;
+    this.state = 'waveComplete';
+    return this.nextWave();
+  };
+
   Game.prototype.makeEnemy = function (type, x, y) {
     var t = ENEMY_TYPES[type], hp = Math.round(t.hp * waveHpScale(this.wave));
     return { type: type, name: t.name, behavior: t.behavior, x: x, y: y,
@@ -135,7 +172,7 @@
     var p = this.player, dx = aimX - p.x, dy = aimY - p.y, m = Math.sqrt(dx * dx + dy * dy) || 1;
     this.bullets.push({ x: p.x, y: p.y, vx: dx / m * CFG.bulletSpeed, vy: dy / m * CFG.bulletSpeed,
                         radius: CFG.bulletRadius, life: 2, damageType: this.damageType });
-    p.fireTimer = CFG.fireCooldown;
+    p.fireTimer = CFG.fireCooldown * Math.pow(0.82, this.weaponLevel);
     this.events.push('shot');
     return true;
   };
