@@ -59,7 +59,7 @@ eq('wave 6+ roster has all six', T.waveRoster(6).length, 6);
 ok('spawn interval tightens with waves', T.waveSpawnInterval(6) < T.waveSpawnInterval(1));
 ok('enemy hp scales with waves', T.waveHpScale(6) > T.waveHpScale(1));
 var gv = new T.Game(1); gv.start(); gv.wave = 13; gv.timeLeft = 0.01; gv.update(0.05, {});
-gv.nextWave(); eq('victory after wave 13', gv.state, 'victory');
+gv.nextWave(); eq('victory after wave 3', gv.state, 'victory');
 
 // damage type switching
 var gd = new T.Game(2); gd.start();
