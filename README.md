@@ -27,6 +27,9 @@ Opening `index.html` directly from disk also works in most browsers.
 | Restart | `R` |
 | Mute | `M` (button also available) |
 | Volume | slider below the play field |
+| Shop: buy hull repair | `1` (on the between-wave shop screen) |
+| Shop: buy weapon upgrade | `2` (on the between-wave shop screen) |
+| Continue to next wave | `Space` |
 
 ## What is in this build
 
@@ -39,6 +42,11 @@ Opening `index.html` directly from disk also works in most browsers.
 - Basic chaser enemies that spawn from the field edges and home in on the player.
 - Hull and shields: shields absorb damage first and recharge after 3 seconds without being hit;
   hull damage is permanent within a run. Hull at zero ends the run with a summary.
+- Between-wave shop after waves 1 and 2 (not after wave 3): spend kill points on a hull repair
+  (40 KP, +35 hull, blocked when unaffordable or hull already full) or a weapon upgrade
+  (60 KP, then 81, then 110 - `ceil(60 * 1.35^level)`), which shortens the fire cooldown by 18%
+  per level (0.18s -> 0.148s -> 0.121s). The screen shows the kill-point balance, both prices and
+  effects, per-offer affordability and an explicit `Space` continue action. `R` clears purchases.
 - Score and unspent kill points tracked separately, plus a local best score (`localStorage`).
 - HUD with hull, shields, wave, timer, score, kill points and best score.
 - Onboarding overlay explaining goal, controls and the shield model; pause, restart, mute/volume.
@@ -46,21 +54,27 @@ Opening `index.html` directly from disk also works in most browsers.
 
 ## Not in this build (later milestones)
 
-The shop and upgrades, abilities and ability slots, damage types/resistances, and the
-five remaining enemy behaviors.
+The visually distinct ranged enemy from wave 2, accessibility pass and release readiness, plus
+abilities and ability slots, damage types/resistances and the remaining enemy behaviors.
 
 ## Tests
 
 ```bash
 node test/game.test.js
+node test/combat.test.js
+node test/rules.test.js
+node test/shop.test.js
 ```
 
 Headless logic tests covering movement, firing cooldown, kill rewards, shield/hull damage, shield
-regen delay, contact-damage cooldown, spawning, 90-second wave expiry, pause and restart.
+regen delay, contact-damage cooldown, spawning, 90-second wave expiry, pause and restart, wave
+progression to victory, economy rules and the between-wave shop (opening, pricing, affordability,
+upgrade effect, continue and restart reset).
 
 ## Layout
 
 - `index.html` — page, HUD markup, styles
 - `src/game.js` — DOM-free game logic (also loadable with `require` in Node)
 - `src/main.js` — rendering, input, audio, HUD and overlay wiring
-- `test/game.test.js` — headless tests
+- `src/logic.js` — pure economy/shop rules
+- `test/game.test.js`, `test/combat.test.js`, `test/rules.test.js`, `test/shop.test.js` — headless tests
