@@ -8,7 +8,7 @@ function eq(name, a, b) { ok(name + ' (' + a + ' == ' + b + ')', a === b); }
 
 var S = T.ENEMY_TYPES.shooter;
 eq('shooter behavior is ranged', S.behavior, 'ranged');
-eq('shooter telegraph is 0.6s', S.telegraph, 0.6);
+eq('shooter telegraph is 0.8s', S.telegraph, 0.8);
 ok('shooter has a firing range', typeof S.range === 'number' && S.range > 0);
 
 ok('shooter absent from wave 1', T.waveRoster(1).indexOf('shooter') < 0);

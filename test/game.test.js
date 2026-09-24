@@ -52,7 +52,7 @@ t('shield absorbs before hull, then hull takes the remainder', function () {
   g.damagePlayer(20);
   assert.strictEqual(g.player.shield, TW.CFG.shieldMax - 20);
   assert.strictEqual(g.player.hull, TW.CFG.hullMax);
-  g.damagePlayer(50);
+  g.damagePlayer(TW.CFG.shieldMax - 20 + 10);
   assert.strictEqual(g.player.shield, 0);
   assert.strictEqual(g.player.hull, TW.CFG.hullMax - 10);
 });

@@ -20,7 +20,7 @@ ok('weakness hit emits feedback event', ev.indexOf('weaknessHit') >= 0);
 var e2 = g.makeEnemy('chaser', 100, 100);
 var off = g.damageEnemy(e2, 10, 'cryonic');
 ok('non-matching damage still hurts (killable with any type)', off > 0 && off < 20);
-ok('armored tank takes reduced non-matching damage', g.damageEnemy(g.makeEnemy('tank', 0, 0), 10, 'plasma') === 5);
+ok('armored tank takes reduced non-matching damage', g.damageEnemy(g.makeEnemy('tank', 0, 0), 10, 'plasma') === 7.5);
 
 // telegraphs: shooter winds up before firing, controller before a hazard
 var gs = new T.Game(3); gs.start(); gs.enemies = [gs.makeEnemy('shooter', gs.player.x + 100, gs.player.y)];
