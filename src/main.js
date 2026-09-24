@@ -132,12 +132,28 @@
     ctx.fillStyle = '#ffe08a';
     game.bullets.forEach(function (b) { ctx.beginPath(); ctx.arc(b.x, b.y, b.radius, 0, 6.2832); ctx.fill(); });
 
+    /* Hostile shots and hazards must be visible for attacks to be readable. */
+    ctx.fillStyle = '#f1c40f';
+    game.hostileShots.forEach(function (b) {
+      ctx.beginPath(); ctx.arc(b.x, b.y, b.radius, 0, 6.2832); ctx.fill();
+    });
+    game.hazards.forEach(function (h) {
+      ctx.strokeStyle = 'rgba(241, 196, 15, 0.8)'; ctx.lineWidth = 2;
+      ctx.beginPath(); ctx.arc(h.x, h.y, h.radius, 0, 6.2832); ctx.stroke();
+    });
+
     game.enemies.forEach(function (e) {
       const ENEMY_COLORS = { chaser: '#c0392b', shooter: '#8e44ad', flanker: '#d35400',
         splitter: '#16a085', tank: '#7f8c8d', controller: '#2980b9' };
       ctx.fillStyle = e.hitFlash > 0 ? '#ffffff' : (ENEMY_COLORS[e.type] || '#c0392b');
       ctx.beginPath(); ctx.arc(e.x, e.y, e.radius, 0, 6.2832); ctx.fill();
       ctx.strokeStyle = '#ff8a80'; ctx.beginPath(); ctx.arc(e.x, e.y, e.radius + 3, 0, 6.2832); ctx.stroke();
+      if (e.telegraph > 0 && e.telegraphMax > 0) {
+        /* Wind-up ring: shrinks as the telegraph runs out, so attacks read before they land. */
+        ctx.strokeStyle = '#f1c40f'; ctx.lineWidth = 3;
+        ctx.beginPath(); ctx.arc(e.x, e.y, e.radius + 4 + 10 * (e.telegraph / e.telegraphMax), 0, 6.2832); ctx.stroke();
+        ctx.lineWidth = 1;
+      }
     });
 
     var p = game.player, ang = Math.atan2(input.aimY - p.y, input.aimX - p.x);
