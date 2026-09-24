@@ -9,33 +9,33 @@
     width: 960, height: 600,
     waveSeconds: 90, totalWaves: 3,
     playerSpeed: 260, playerRadius: 14,
-    hullMax: 100, shieldMax: 60, shieldRegen: 4, shieldRegenDelay: 3,
-    bulletSpeed: 560, bulletRadius: 4, bulletDamage: 10, fireCooldown: 0.18,
-    chaserSpeed: 78, chaserRadius: 13, chaserHp: 20, chaserDamage: 12,
-    contactCooldown: 0.8, spawnInterval: 1.6, maxEnemies: 24, killPoints: 10,
+    hullMax: 120, shieldMax: 70, shieldRegen: 6, shieldRegenDelay: 3,
+    bulletSpeed: 560, bulletRadius: 4, bulletDamage: 15, fireCooldown: 0.15,
+    chaserSpeed: 78, chaserRadius: 13, chaserHp: 18, chaserDamage: 8,
+    contactCooldown: 0.8, spawnInterval: 1.8, maxEnemies: 12, killPoints: 10,
     weaknessMultiplier: 2,
-    hostileShotSpeed: 210, hostileShotRadius: 5, hostileShotDamage: 9,
-    hazardDamage: 7, hazardTick: 0.5
+    hostileShotSpeed: 210, hostileShotRadius: 5, hostileShotDamage: 6,
+    hazardDamage: 5, hazardTick: 0.5
   };
 
   var DAMAGE_TYPES = ['plasma', 'ion', 'cryonic', 'gravitic'];
 
   /* Six readable behaviors. telegraph = seconds of visible wind-up before an attack/hazard. */
   var ENEMY_TYPES = {
-    chaser:     { name: 'Chaser',    behavior: 'seek',    hp: 20,  speed: 78,  radius: 13, contact: 12,
+    chaser:     { name: 'Chaser',    behavior: 'seek',    hp: 18,  speed: 78,  radius: 13, contact: 8,
                   weakness: 'plasma',   points: 10, telegraph: 0 },
-    shooter:    { name: 'Shooter',   behavior: 'ranged',  hp: 26,  speed: 62,  radius: 13, contact: 8,
-                  weakness: 'ion',      points: 14, telegraph: 0.6, range: 260, fireInterval: 2.2 },
-    flanker:    { name: 'Flanker',   behavior: 'flank',   hp: 16,  speed: 155, radius: 11, contact: 10,
+    shooter:    { name: 'Shooter',   behavior: 'ranged',  hp: 24,  speed: 62,  radius: 13, contact: 6,
+                  weakness: 'ion',      points: 18, telegraph: 0.8, range: 240, fireInterval: 3.0 },
+    flanker:    { name: 'Flanker',   behavior: 'flank',   hp: 14,  speed: 140, radius: 11, contact: 7,
                   weakness: 'cryonic',  points: 16, telegraph: 0.35, dashInterval: 2.6 },
-    tank:       { name: 'Tank',      behavior: 'armored', hp: 90,  speed: 42,  radius: 22, contact: 20,
-                  weakness: 'gravitic', points: 30, telegraph: 0, armor: 0.5 },
-    splitter:   { name: 'Splitter',  behavior: 'split',   hp: 34,  speed: 70,  radius: 18, contact: 12,
+    tank:       { name: 'Tank',      behavior: 'armored', hp: 55,  speed: 42,  radius: 22, contact: 12,
+                  weakness: 'gravitic', points: 40, telegraph: 0, armor: 0.25 },
+    splitter:   { name: 'Splitter',  behavior: 'split',   hp: 28,  speed: 70,  radius: 18, contact: 8,
                   weakness: 'cryonic',  points: 18, telegraph: 0, shards: 2 },
-    controller: { name: 'Controller', behavior: 'area',   hp: 40,  speed: 50,  radius: 16, contact: 10,
+    controller: { name: 'Controller', behavior: 'area',   hp: 32,  speed: 50,  radius: 16, contact: 7,
                   weakness: 'ion',      points: 22, telegraph: 1.0, hazardInterval: 4, hazardRadius: 70,
                   hazardLife: 5 },
-    shard:      { name: 'Shard',     behavior: 'seek',    hp: 10,  speed: 120, radius: 9,  contact: 7,
+    shard:      { name: 'Shard',     behavior: 'seek',    hp: 8,   speed: 115, radius: 9,  contact: 5,
                   weakness: 'plasma',   points: 6, telegraph: 0 }
   };
 
@@ -46,8 +46,8 @@
     if (wave >= 3) { r.push('splitter'); r.push('tank'); r.push('controller'); }
     return r;
   }
-  function waveSpawnInterval(wave) { return Math.max(0.7, CFG.spawnInterval - (wave - 1) * 0.35); }
-  function waveHpScale(wave) { return 1 + (wave - 1) * 0.3; }
+  function waveSpawnInterval(wave) { return Math.max(1.15, CFG.spawnInterval - (wave - 1) * 0.2); }
+  function waveHpScale(wave) { return 1 + (wave - 1) * 0.1; }
 
   function dist(a, b) { var dx = a.x - b.x, dy = a.y - b.y; return Math.sqrt(dx * dx + dy * dy); }
   function clamp(v, lo, hi) { return v < lo ? lo : v > hi ? hi : v; }
